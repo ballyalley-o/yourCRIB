@@ -527,7 +527,7 @@ function CreateListing() {
                     required={offer}
                   />
                   {type === "sale" ? (
-                    <p className="badge badge-warning p-3">
+                    <p className="badge badge-warning mb-3 p-3">
                       {" "}
                       <FcRating />
                       SAVINGS: $
@@ -537,7 +537,7 @@ function CreateListing() {
                     </p>
                   ) : (
                     <span className="col-span-1 col-row-1 my-auto block">
-                      <p className="badge badge-outline p-3">
+                      <p className="badge badge-outline mb-3 p-3">
                         $
                         {discountedPrice
                           .toString()
