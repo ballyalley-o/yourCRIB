@@ -57,7 +57,7 @@ function Slider() {
   return (
     listings && (
       <>
-        <h1 className="text-8xl text-bolder p-20 justify-center">Kia Ora <i>manuhiri</i> </h1>
+        <h1 className="text-8xl text-bolder p-20 justify-center">Kia Ora, <i>manuhiri</i> </h1>
         <Swiper
           slidesPerView={3}
           pagination={{ clickable: true }}

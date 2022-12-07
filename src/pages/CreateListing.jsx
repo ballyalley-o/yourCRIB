@@ -531,12 +531,9 @@ function CreateListing() {
                       {" "}
                       <FcRating />
                       SAVINGS: $
-                      {regularPrice
+                      {(regularPrice - discountedPrice)
                         .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",") -
-                        discountedPrice
-                          .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     </p>
                   ) : (
                     <span className="col-span-1 col-row-1 my-auto block">

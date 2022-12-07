@@ -134,7 +134,10 @@ function SingleListing() {
                 {listing.offer && (
                   <p className="badge badge-warning text-xl">
                     <AiFillDollarCircle />
-                    {listing.regularPrice - listing.discountedPrice} discount
+                    {(listing.regularPrice - listing.discountedPrice)
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                    discount
                   </p>
                 )}
               </div>
