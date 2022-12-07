@@ -69,7 +69,7 @@ function Explore() {
               </p>
               <Link to="/category/sale" className="p-6">
                 <button className="btn btn-white text-lg bg-primary text-white">
-                  Book now
+                  Buy Now
                 </button>
               </Link>
             </div>
