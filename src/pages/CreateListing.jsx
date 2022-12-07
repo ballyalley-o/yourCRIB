@@ -505,7 +505,11 @@ function CreateListing() {
                   false
                 ) : (
                   <p className="badge badge-outline static my-auto p-3">
-                    ${regularPrice}/ Month
+                    $
+                    {regularPrice
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    / Month
                   </p>
                 )}
               </div>
