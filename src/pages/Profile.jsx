@@ -1,27 +1,56 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { getAuth, updateProfile } from 'firebase/auth'
-import { updateDoc, doc } from "firebase/firestore"
+import { updateDoc, doc, collection, getDocs, query, where, orderBy, deleteDoc } from "firebase/firestore"
 import { db } from '../firebase.config'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import ListingItem from '../components/ListingItem'
 import { BiRightArrow } from "react-icons/bi";
-import { AiOutlineHome } from "react-icons/ai";
-import { FcExport } from "react-icons/fc"
+import { FcExport, FcEditImage } from "react-icons/fc"
+import { MdFileDownloadDone } from "react-icons/md"
+
 
 
 function Profile() {
     const auth = getAuth()
+    const [ loading, setLoading ] = useState(true)
+    const [ listings, setListings ] = useState(null)
     const [ changeDetails, setChangeDetails ] = useState(false)
     const [ formData, setFormData ] = useState({
         name: auth.currentUser.displayName,
         email: auth.currentUser.email
     })
 
+
     // const [ proName, setProName ] = useState()
 
     const { name, email } = formData
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+      const fetchUserListings = async () => {
+        const listingsRef = collection(db, "listings")
+        const q = query(listingsRef, where('userRef', '==', auth.currentUser.uid), orderBy('timestamp', 'desc'))
+
+
+      const querySnap = await getDocs(q)
+
+      let listings = []
+
+      querySnap.forEach((doc) => {
+        return listings.push({
+          id: doc.id,
+          data: doc.data()
+        })
+      })
+
+      setListings(listings)
+      setLoading(false)
+    }
+
+    fetchUserListings()
+  }, [auth.currentUser.uid])
 
     const onLogout = () => {
         auth.signOut()
@@ -53,6 +82,18 @@ function Profile() {
         }))
     }
 
+    const onDelete = async (listingId) => {
+      if (window.confirm('Are you sure you want to delete?')) {
+        await deleteDoc(doc(db, 'listings', listingId))
+        const updatedListings = listings.filter((listing) => listing.id !== listingId)
+        setListings(updatedListings)
+        toast.success('Successfully deleted your listing')
+
+      }
+    }
+
+    const onEdit = (listingId) => navigate(`/edit-listing/${listingId}`)
+
     const profileNameChange = () => {
       if (name.endsWith('s')){
         return `${name}${'\' CRIB'}`
@@ -63,23 +104,51 @@ function Profile() {
 
   return (
     <>
-      <div className="hero min-h-screen mx-auto bg-base-200">
+      <div className="hero min-h-screen mx-auto">
         <div className="hero-content flex-col lg:flex-row-reverse">
           <img
             src="https://placeimg.com/260/400/arch"
             className="max-w-sm rounded-lg shadow-2xl"
-            />
+            alt="Some"
+          />
           <span className="inline-block">
             <p
-              className="btn btn-accent subpixel-antialiased text-lg "
+              className="btn btn-accent subpixel-antialiased text-lg"
               onClick={() => {
                 changeDetails && onSubmit();
                 setChangeDetails((prevState) => !prevState);
               }}
             >
-              {changeDetails ? "done" : "edit"}
+              {changeDetails ? (
+                <span
+                  className="text-4xl tooltip tooltip-left tooltip-info"
+                  data-tip="Done"
+                >
+                  <MdFileDownloadDone />
+                </span>
+              ) : (
+                <span
+                  className="text-4xl tooltip tooltip-left tooltip-info"
+                  data-tip="edit"
+                >
+                  <FcEditImage />
+                </span>
+              )}
             </p>
+            <div className="pt-10">
+              <button
+                type="button"
+                className="btn btn-accent text-xl subpixel-antialiased tooltip tooltip-left tooltip-info"
+                data-tip="Log out"
+                onClick={onLogout}
+              >
+                <span className="text-4xl">
+                  <FcExport />
+                </span>
+              </button>
+            </div>
           </span>
+
           <div>
             <h1 className="text-8xl font-bold">{profileNameChange()}</h1>
             <main>
@@ -127,26 +196,34 @@ function Profile() {
             <Link to="/create-listing" className="">
               <div className="btn-group btn-group place-content-start">
                 <button className="btn btn-active ">
-                  Create your listing
+                  Create your own listing
                   <BiRightArrow />
                 </button>
               </div>
             </Link>
-            <div className="pt-40">
-              <button
-                type="button"
-                className="btn btn-accent text-xl"
-                onClick={onLogout}
-              >
-                <span className="text-4xl">
-                  <FcExport />
-                </span>
-                Log out
-              </button>
-            </div>
           </div>
         </div>
       </div>
+      {!loading && listings?.length > 0 && (
+        <>
+          <p className="text-8xl text-center mx-50 p-10">Your Listings</p>
+          <div className="container mx-auto">
+            <div className="grid grid-cols-4 grid-rows-2 gap-4 grid-flow-col">
+              <ul className="col-span-1 row-span-1">
+                {listings.map((listing) => (
+                  <ListingItem
+                    key={listing.id}
+                    listing={listing.data}
+                    id={listing.id}
+                    onDelete={() => onDelete(listing.id)}
+                    onEdit={() => onEdit(listing.id)}
+                  />
+                ))}
+              </ul>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }

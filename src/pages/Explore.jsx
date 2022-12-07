@@ -10,11 +10,17 @@ function Explore() {
   return (
     <div>
       <main>
-        <h1 className="min-h-screen text-left text-8xl mx-auto text-light p-10">
-          Explore
-        </h1>
-        <Slider />
-        <div className="hero min-h-screen static">
+        {/* <h1 className="hero hero-content text-8xl text-center text-bolder justify-center p-20">
+         Kia Ora!
+        </h1> */}
+        <div className="hero min-h-screen flex items-center">
+          <div className="flex-1 max w-4x1 mx-auto p-10">
+            <div className="grid grid-cols-3 grid-rows-15 grid-flow-row gap-5">
+              <div className="col-span-3 pt-10 text-center p-10 rounded-xl ">
+                <Slider />
+              </div>
+
+        <div className="col-span-3 hero min-h-screen static">
           <div className="hero-content flex-col lg:flex-row">
             <img src={rentImage} alt="rent" className="rounded-3xl" />
             <div>
@@ -31,7 +37,7 @@ function Explore() {
             </div>
           </div>
         </div>
-        <div className="hero min-h-screen static">
+        <div className="col-span-3 hero min-h-screen static">
           <div className="hero-content flex-col lg:flex-row">
             <img src={bnbImage} alt="bnb" className="rounded-3xl" />
             <div>
@@ -50,7 +56,7 @@ function Explore() {
             </div>
           </div>
         </div>
-        <div className="hero min-h-screen static">
+        <div className="col-span-3 hero min-h-screen static">
           <div className="hero-content flex-col lg:flex-row">
             <img src={sellImage} alt="sell" className="rounded-3xl" />
             <div>
@@ -67,6 +73,9 @@ function Explore() {
                 </button>
               </Link>
             </div>
+          </div>
+        </div>
+        </div>
           </div>
         </div>
       </main>

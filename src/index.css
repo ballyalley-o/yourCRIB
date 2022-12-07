@@ -60,7 +60,6 @@
 }
 
 .leafletContainer {
-  width: 100%;
   height: 200px;
   overflow-x: hidden;
   margin-bottom: 3rem;

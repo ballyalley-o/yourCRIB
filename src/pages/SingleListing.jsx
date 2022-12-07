@@ -55,7 +55,7 @@ function SingleListing() {
       <div className="hero min-h-screen flex items-center">
         <div className="flex-1 max w-4x1 mx-auto p-10">
           <div className="grid grid-cols-6 grid-rows-4 gap-10 grid-flow-row w-full h-100 z-40">
-            <div className="col-span-3 row-span-2 text-center p-10">
+            <div className="col-span-3 row-span-1 text-center  p-10">
               <Swiper
                 slidesPerView={1}
                 pagination={{ clickable: true }}
@@ -63,16 +63,19 @@ function SingleListing() {
                 modules={[Navigation, Pagination, Scrollbar, A11y]}
                 className="swiperSlideDiv"
                 scrollbar={{ draggable: true }}
+                loop={true}
               >
                 {listing.imgUrls.map((index) => (
                   <SwiperSlide key={index}>
                     <div
+                      className="swiperSlideDiv object-fill"
                       style={{
                         background: `url(${listing.imgUrls[index]}) center no-repeat`,
-                        backgroundSize: "",
-                        minHeight: "26rem",
+                        backgroundSize: "fill",
                       }}
-                    ></div>
+                    >
+                      <img src={[index]} alt="" />
+                    </div>
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -95,7 +98,7 @@ function SingleListing() {
                 </span>
                 {shareLinkCopied && (
                   <div
-                    className="tooltip tooltip-open text-white tooltip-info tooltip-left"
+                    className="tooltip tooltip-open text-white tooltip-info tooltip-no-arrow"
                     data-tip="Copied!"
                   ></div>
                 )}
@@ -169,12 +172,12 @@ function SingleListing() {
                 </li>
               </ul>
               <h1 className="text-2xl pt-10">Location</h1>
-              <div className="leafletContainer col-span-2 rounded-2xl mt-5">
+              <div className="col-span-5 leafletContainer rounded-2xl mt-5">
                 <MapContainer
                   style={{ height: "100%", width: "100%" }}
                   center={[listing.geolocation.lat, listing.geolocation.lng]}
                   zoom={17}
-                  scrollWheelZoom={false}
+                  scrollWheelZoom={true}
                 >
                   <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

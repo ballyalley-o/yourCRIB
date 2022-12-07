@@ -9,6 +9,7 @@ import Deals from './pages/Deals'
 import Profile from './pages/Profile'
 import SingleListing from "./pages/SingleListing";
 import CreateListing from './pages/CreateListing'
+import EditListing from "./pages/EditListing";
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import Navbar from './components/Navbar'
@@ -32,8 +33,12 @@ function App() {
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/create-listing" element={<CreateListing />} />
-          <Route path="/category/:catgeoryName/:listingId" element={<SingleListing />} />
-          <Route path="/contact/:landlordId" element={<Contact/>} />
+          <Route path="/edit-listing/:listingId" element={<EditListing />} />
+          <Route
+            path="/category/:categoryName/:listingId"
+            element={<SingleListing />}
+          />
+          <Route path="/contact/:landlordId" element={<Contact />} />
         </Routes>
       </Router>
       <ToastContainer />

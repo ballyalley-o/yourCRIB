@@ -6,19 +6,20 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { doc, updateDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
-import { FcPlus } from "react-icons/fc";
+import { FaSave } from "react-icons/fa";
 import { db } from "../firebase.config";
-import { v4 as uuidv4 } from 'uuid'
-import { toast } from 'react-toastify'
-import { FcRating } from 'react-icons/fc'
+import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
+import { FcRating } from "react-icons/fc";
 
-function CreateListing() {
+function EditListing() {
   //eslint-disable-next-line
   const [geolocationEnabled, setGeolocationEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [listing, setListing] = useState(false);
   const [formData, setFormData] = useState({
     type: "bnb",
     name: "",
@@ -53,8 +54,38 @@ function CreateListing() {
 
   const auth = getAuth();
   const navigate = useNavigate();
+  const params = useParams();
   const isMounted = useRef(true);
 
+  //Redirect to listing is not User's
+  useEffect(() => {
+    if(listing && listing.userRef !== auth.currentUser.uid) {
+      toast.error('You cannot edit that listing')
+      navigate('/')
+    }
+  })
+
+  //fetch listing to edit
+  useEffect(() => {
+    setLoading(true);
+    const fetchListing = async () => {
+      const docRef = doc(db, 'listings', params.listingId)
+      const docSnap = await getDoc(docRef)
+      if(docSnap.exists()) {
+        setListing(docSnap.data())
+        setFormData({...docSnap.data(), address: docSnap.data().location})
+        setLoading(false)
+      } else {
+        navigate('/')
+        toast.error('Listing does not exist')
+      }
+    }
+
+    fetchListing()
+  }, [params.listingId, navigate])
+
+
+  //sets user ref to log in user
   useEffect(() => {
     if (isMounted) {
       onAuthStateChanged(auth, (user) => {
@@ -75,22 +106,22 @@ function CreateListing() {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    setLoading(true)
+    setLoading(true);
 
-    if(discountedPrice >= regularPrice) {
-      setLoading(false)
-      toast.error('discounted price needs to be less than regular price')
-      return
+    if (discountedPrice >= regularPrice) {
+      setLoading(false);
+      toast.error("discounted price needs to be less than regular price");
+      return;
     }
 
-    if(images.length > 6) {
-      setLoading(false)
-      toast.error('Cannot exceed 6 images')
-      return
+    if (images.length > 6) {
+      setLoading(false);
+      toast.error("Cannot exceed 6 images");
+      return;
     }
 
-    let geolocation = {}
-    let location
+    let geolocation = {};
+    let location;
 
     if (geolocationEnabled) {
       const response = await fetch(
@@ -100,32 +131,31 @@ function CreateListing() {
 
       const data = await response.json();
 
-      geolocation.lat = data.results[0]?.geometry.location.lat ?? 0
-      geolocation.lng = data.results[0]?.geometry.location.lng ?? 0
+      geolocation.lat = data.results[0]?.geometry.location.lat ?? 0;
+      geolocation.lng = data.results[0]?.geometry.location.lng ?? 0;
 
       location =
-        data.status === 'ZERO_RESULTS'
+        data.status === "ZERO_RESULTS"
           ? undefined
-          : data.results[0]?.formatted_address
+          : data.results[0]?.formatted_address;
 
-          if (location === undefined || location.includes("undefined")) {
-            setLoading(false)
-            toast.error('Please enter a correct address')
-            return
-          }
-
+      if (location === undefined || location.includes("undefined")) {
+        setLoading(false);
+        toast.error("Please enter a correct address");
+        return;
+      }
     } else {
-      geolocation.lat = latitude
-      geolocation.lng = longitude
+      geolocation.lat = latitude;
+      geolocation.lng = longitude;
     }
 
     //stores images in firebase
     const storeImage = async (image) => {
       return new Promise((resolve, reject) => {
-        const storage = getStorage()
-        const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`
-        const storageRef = ref(storage, 'images/' + fileName)
-        const uploadTask = uploadBytesResumable(storageRef, image)
+        const storage = getStorage();
+        const fileName = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+        const storageRef = ref(storage, "images/" + fileName);
+        const uploadTask = uploadBytesResumable(storageRef, image);
 
         uploadTask.on(
           "state_changed",
@@ -140,8 +170,8 @@ function CreateListing() {
               case "running":
                 console.log("Upload is running");
                 break;
-                default:
-                  break
+              default:
+                break;
             }
           },
           (error) => {
@@ -155,34 +185,36 @@ function CreateListing() {
             });
           }
         );
-      })
-    }
+      });
+    };
 
     const imgUrls = await Promise.all(
       [...images].map((image) => storeImage(image))
-      ).catch(() => {
-        setLoading(false);
-        toast.error('failed to upload images')
-        return
-      })
+    ).catch(() => {
+      setLoading(false);
+      toast.error("failed to upload images");
+      return;
+    });
 
-      const formDataCopy = {
-        ...formData,
-        imgUrls,
-        geolocation,
-        timestamp: serverTimestamp()
-      }
+    const formDataCopy = {
+      ...formData,
+      imgUrls,
+      geolocation,
+      timestamp: serverTimestamp(),
+    };
 
-      formDataCopy.location = address
-      delete formDataCopy.images
-      delete formDataCopy.address
-      !formDataCopy.offer && delete formDataCopy.discountedPrice
+    formDataCopy.location = address;
+    delete formDataCopy.images;
+    delete formDataCopy.address;
+    !formDataCopy.offer && delete formDataCopy.discountedPrice;
 
-      const docRef = await addDoc(collection(db, 'listings'), formDataCopy)
-      setLoading(false)
-      toast.success('successfully added your new Listing')
-      navigate(`/category/${formDataCopy.type}/${docRef.id}`)
-  }
+    //update listing
+    const docRef = doc(db, 'listings', params.listingId);
+    await updateDoc(docRef, formDataCopy)
+    setLoading(false);
+    toast.success("successfully added your new Listing");
+    navigate(`/category/${formDataCopy.type}/${docRef.id}`);
+  };
 
   const onMutate = (e) => {
     let boolean = null;
@@ -216,10 +248,16 @@ function CreateListing() {
     return <Spinner />;
   }
 
+     const onCancel =(listingId) => {
+      if(window.confirm('Are you sure you want to Cancel?')) {
+        navigate('/profile')
+      }
+    }
+
   return (
     <>
       <h1 className="text-8xl text-bolder justify-center p-10">
-        Create a Listing
+        Edit your Listing
       </h1>
       <div className="min-h-screen flex justify-center bg-stone-200">
         <main>
@@ -300,7 +338,7 @@ function CreateListing() {
                   Address
                 </label>
                 <textarea
-                  className="col-span-2 w-full text-primary formInputAddress focus:bg-primary focus:text-white mb-3"
+                  className="col-span-2 w-full formInputAddress focus:bg-primary focus:text-white mb-3"
                   id="address"
                   value={address}
                   onChange={onMutate}
@@ -539,8 +577,8 @@ function CreateListing() {
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                     </p>
                   ) : (
-                    <span className="col-span-1 col-row-1 my-auto block">
-                      <p className="badge badge-outline p-3">
+                    <span className="col-span-1 col-row-1 my-auto block gap-3">
+                      <p className="badge badge-outline p-3 mb-3">
                         $
                         {discountedPrice
                           .toString()
@@ -579,12 +617,24 @@ function CreateListing() {
               <div className="p-20">
                 <h1 className="text-center text-8xl"> </h1>
               </div>
-              <button type="submit" className="btn btn-primary text-2xl">
-                <span className="text-4xl">
-                  <FcPlus />
-                </span>
-                Create Listing
-              </button>
+              <span className="">
+                <button type="submit" className="btn btn-primary text-2xl">
+                  <span className="text-4xl pr-2">
+                    <FaSave />
+                  </span>
+                  Save Edit
+                </button>
+              </span>
+              <span className="ml-4">
+                <button
+                  type="button"
+                  className="btn btn-white text-2xl"
+                  onClick={onCancel}
+                >
+                  <span className="text-4xl text-primary pr-2"></span>
+                  Cancel
+                </button>
+              </span>
             </div>
           </form>
         </main>
@@ -593,4 +643,4 @@ function CreateListing() {
   );
 }
 
-export default CreateListing;
+export default EditListing;
