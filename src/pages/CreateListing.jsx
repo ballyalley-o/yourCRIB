@@ -488,11 +488,11 @@ function CreateListing() {
             </div>
             <div className="grid grid-cols-4 col-row-2 w-1/3  gap-y-4 grid-flow-col static mb-10">
               <div className="col-span-2">
-                <label className="block uppercase text-gray-700 text-xs font-bold mb-2 static">
+                <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                   Regular Price
                 </label>
                 <input
-                  className="bg-white text-primary border-red-500 rounded-lg py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-primary focus:text-white"
+                  className="bg-white text-primary border-red-500 block rounded-lg py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-primary focus:text-white"
                   type="number"
                   id="regularPrice"
                   value={regularPrice}
@@ -504,7 +504,7 @@ function CreateListing() {
                 {type === "sale" ? (
                   false
                 ) : (
-                  <p className="badge badge-outline static my-auto p-3">
+                  <p className="badge badge-outline block my-auto">
                     $
                     {regularPrice
                       .toString()
@@ -531,7 +531,7 @@ function CreateListing() {
                     required={offer}
                   />
                   {type === "sale" ? (
-                    <p className="badge badge-warning mb-3 p-3">
+                    <p className="badge badge-warning block mb-3">
                       {" "}
                       <FcRating />
                       SAVINGS: $
@@ -541,7 +541,7 @@ function CreateListing() {
                     </p>
                   ) : (
                     <span className="col-span-1 col-row-1 my-auto block">
-                      <p className="badge badge-outline mb-3 p-3">
+                      <p className="badge badge-outline block mb-3 ">
                         $
                         {discountedPrice
                           .toString()
@@ -551,7 +551,7 @@ function CreateListing() {
                       <p className="badge badge-success p-3">
                         <FcRating />
                         SAVINGS: $
-                        {(discountedPrice - regularPrice)
+                        {(regularPrice - discountedPrice)
                           .toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                       </p>
