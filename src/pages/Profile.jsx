@@ -8,6 +8,7 @@ import ListingItem from '../components/ListingItem'
 import { BiRightArrow } from "react-icons/bi";
 import { FcExport, FcEditImage } from "react-icons/fc"
 import { MdFileDownloadDone } from "react-icons/md"
+import ProfilePicture from '../components/ProfilePicture'
 
 
 
@@ -106,11 +107,7 @@ function Profile() {
     <>
       <div className="hero min-h-screen mx-auto">
         <div className="hero-content flex-col lg:flex-row-reverse">
-          <img
-            src="https://placeimg.com/260/400/arch"
-            className="max-w-sm rounded-lg shadow-2xl"
-            alt="Some"
-          />
+          <ProfilePicture />
           <span className="inline-block">
             <p
               className="btn btn-accent subpixel-antialiased text-lg"
@@ -209,16 +206,15 @@ function Profile() {
           <p className="text-8xl text-center mx-50 p-10">Your Listings</p>
           <div className="container mx-auto">
             <div className="grid grid-cols-4 grid-rows-2 gap-4 grid-flow-row">
-                {listings.map((listing) => (
-
-                    <ListingItem
-                      key={listing.id}
-                      listing={listing.data}
-                      id={listing.id}
-                      onDelete={() => onDelete(listing.id)}
-                      onEdit={() => onEdit(listing.id)}
-                    />
-                ))}
+              {listings.map((listing) => (
+                <ListingItem
+                  key={listing.id}
+                  listing={listing.data}
+                  id={listing.id}
+                  onDelete={() => onDelete(listing.id)}
+                  onEdit={() => onEdit(listing.id)}
+                />
+              ))}
             </div>
           </div>
         </>
