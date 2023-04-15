@@ -6,7 +6,6 @@ import { toast } from 'react-toastify'
 import {
   FaUserAstronaut,
   FaLock,
-  FaEye,
   FaGlobe,
   FaGreaterThan,
 } from "react-icons/fa";

@@ -208,18 +208,17 @@ function Profile() {
         <>
           <p className="text-8xl text-center mx-50 p-10">Your Listings</p>
           <div className="container mx-auto">
-            <div className="grid grid-cols-4 grid-rows-2 gap-4 grid-flow-col">
-              <ul className="col-span-1 row-span-1">
+            <div className="grid grid-cols-4 grid-rows-2 gap-4 grid-flow-row">
                 {listings.map((listing) => (
-                  <ListingItem
-                    key={listing.id}
-                    listing={listing.data}
-                    id={listing.id}
-                    onDelete={() => onDelete(listing.id)}
-                    onEdit={() => onEdit(listing.id)}
-                  />
+
+                    <ListingItem
+                      key={listing.id}
+                      listing={listing.data}
+                      id={listing.id}
+                      onDelete={() => onDelete(listing.id)}
+                      onEdit={() => onEdit(listing.id)}
+                    />
                 ))}
-              </ul>
             </div>
           </div>
         </>
