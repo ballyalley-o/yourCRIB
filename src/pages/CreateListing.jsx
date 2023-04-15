@@ -531,10 +531,10 @@ function CreateListing() {
                     required={offer}
                   />
                   {type === "sale" ? (
-                    <p className="badge badge-warning block mb-3">
+                    <p className="badge badge-warning p-3">
                       {" "}
                       <FcRating />
-                      SAVINGS: $
+                       SAVINGS: $
                       {(regularPrice - discountedPrice)
                         .toString()
                         .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
@@ -550,7 +550,8 @@ function CreateListing() {
                       </p>
                       <p className="badge badge-success p-3">
                         <FcRating />
-                        SAVINGS: $
+                        {"  "}
+                         SAVINGS: $
                         {(regularPrice - discountedPrice)
                           .toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}

@@ -9,45 +9,50 @@ function ListingItem({ listing, id, onEdit, onDelete }) {
   return (
     <div className="grid-col-3 grid-flow-col-dense p-16 gap-8">
       <li className="col-span-1 row-span-1 static block">
-        <div className="flex flex-row-reverse cursor-pointer z-40">
-          <span
-            className="tooltip tooltip-right tooltip-error"
-            data-tip="delete"
-          >
-            {onDelete && (
-              <TiDeleteOutline
-                className="card-title inline-block items-left h-6 w-6 text-lg text-error tooltip tooltip-center m-auto"
-                data-tip="Delete listing"
-                onClick={() => onDelete(listing.id, listing.name)}
-              />
+        <div className="card w-96 bg-base-100 shadow-xl rounded-8xl z-999">
+          <span className=" flex inline-flex z-40 ">
+            {listing.offer === false ? null : (
+              <div className="indicator mb-0">
+                <span className="indicator-item indicator-top indicator-right badge badge-warning mb-1 p-5 z-40">
+                  <p className="text-center">
+                    SAVINGS:{" "}
+                    <b>
+                      $
+                      {(listing.regularPrice - listing.discountedPrice)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    </b>{" "}
+                  </p>
+                </span>
+              </div>
             )}
           </span>
-          <span className="tooltip tooltip-left tooltip-error" data-tip="edit">
-            {onEdit && (
-              <BiEdit
-                className="card-title inline-block items-right h-6 w-6 text-lg text-error tooltip tooltip-center m-auto"
-                data-tip="Edit listing"
-                onClick={() => onEdit(id)}
-              />
-            )}
-          </span>
-        </div>
-        {listing.offer === false ? null : (
-          <div className="indicator">
-            <span className="indicator-item indicator-top indicator-right badge badge-warning p-5">
-              <p className="text-center">
-                SAVINGS:{" "}
-                <b>
-                  $
-                  {(listing.regularPrice - listing.discountedPrice)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                </b>{" "}
-              </p>
+          <div className="flex flex-row-reverse mb-1 cursor-pointer">
+            <span
+              className="tooltip tooltip-right tooltip-error"
+              data-tip="delete"
+            >
+              {onDelete && (
+                <TiDeleteOutline
+                  className="card-title inline-flex items-left h-6 w-6 text-lg text-error tooltip tooltip-center m-auto"
+                  data-tip="Delete listing"
+                  onClick={() => onDelete(listing.id, listing.name)}
+                />
+              )}
+            </span>
+            <span
+              className="tooltip tooltip-left tooltip-error"
+              data-tip="edit"
+            >
+              {onEdit && (
+                <BiEdit
+                  className="card-title inline-block items-right h-6 w-6 text-lg text-error tooltip tooltip-center m-auto"
+                  data-tip="Edit listing"
+                  onClick={() => onEdit(id)}
+                />
+              )}
             </span>
           </div>
-        )}
-        <div className="card w-96 bg-base-100 shadow-xl rounded-8xl">
           <Link
             to={`/category/${listing.type}/${id}`}
             className="categoryListingLink"
