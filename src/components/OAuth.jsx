@@ -6,7 +6,6 @@ import { toast } from 'react-toastify'
 import googleIcon from '../assets/svg/googleIcon.svg'
 
 
-
 function OAuth() {
     const navigate = useNavigate()
     const location = useLocation()

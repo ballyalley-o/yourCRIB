@@ -78,7 +78,8 @@ function Slider() {
                       Math.floor(Math.random() * data.imgUrls.length)
                     ]
                   }) center no-repeat`,
-                  backgroundSize: 'cover,',
+                  backgroundSize: 'cover',
+                  objectFit: 'cover',
                   height: '50vh',
                   width: '100%',
                 }}
