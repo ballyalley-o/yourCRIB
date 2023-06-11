@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .formButton,
 .formInput,
 .formInputAddress,
@@ -9,25 +10,25 @@
 .formInputSmall,
 .formInputFile,
 .formButtonActive {
-    padding: 1rem 1rem;
-    background-color: #ffffff;
-    font-weight: light;
-    border-radius: 1rem;
-    font-size: 1rem;
-    margin: 0.5rem 0.5rem 0 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  padding: 1rem 1rem;
+  background-color: #ffffff;
+  font-weight: light;
+  border-radius: 1rem;
+  font-size: 1rem;
+  margin: 0.5rem 0.5rem 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .formButtonActive {
-    background-color: #f8be2c;
-    color: #ffffff;
-    font-weight: 800;
+  background-color: #f8be2c;
+  color: #ffffff;
+  font-weight: 800;
 }
 
 .formButtons {
-    display: flex;
+  display: flex;
 }
 
 .profileName,
@@ -41,6 +42,7 @@
   font-weight: 600;
   width: 100%;
 }
+
 .profileNameActive {
   background-color: rgba(44, 44, 44, 0.1);
 }
@@ -51,6 +53,7 @@
 .profileEmailActive {
   font-weight: 500;
 }
+
 .profileEmailActive {
   background-color: rgba(44, 44, 44, 0.1);
 }
@@ -94,31 +97,34 @@
 .swiperSlideText {
   color: #ffffff;
   position: absolute;
-  top: 70px;
-  left: 0;
+  top: 350px;
+  left: 100px;
   font-weight: 600;
   max-width: 90%;
-  font-size: 1.25rem;
-  background-color: rgba(0, 0, 0, 0.8);
+  font-size: 100px;
+  text-shadow: 0px 0px 10px rgba(44, 44, 44, 0.8);
+
+
   padding: 0.5rem;
 }
 
 @media (min-width: 1024px) {
   .swiperSlideText {
-    font-size: 1.75rem;
+    font-size: 5rem;
   }
 }
 
 .swiperSlidePrice {
-  color: #000000;
+  color: #1a1919;
   position: absolute;
-  top: 143px;
-  left: 11px;
+  align-content: right;
+  top: 300px;
+  left: 380px;
   font-weight: 600;
   max-width: 90%;
-  background-color: #ffffff;
   padding: 0.25rem 0.5rem;
-  border-radius: 1rem;
+  background-color: rgba(255, 234, 0, 0.8);
+
 }
 
 @media (min-width: 1024px) {
