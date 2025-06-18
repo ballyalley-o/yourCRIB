@@ -63,7 +63,7 @@ function Slider() {
           className='swiperSlideDiv'
           loop={true}
           autoplay={{ delay: 3000 }}
-          speed={1200}
+          speed={2200}
         >
           {listings.map(({ data, id }) => (
             <SwiperSlide
@@ -80,24 +80,11 @@ function Slider() {
                   }) center no-repeat`,
                   backgroundSize: 'cover',
                   objectFit: 'cover',
-                  height: '50vh',
-                  width: '100%',
+                  height: '100vh',
+                  width: 'auto',
                 }}
               >
-                <div>
-                  <h1 className='swiperSlideText text-lg'>{data.name}</h1>
-                  <p className='swiperSlidePrice'>
-                    $
-                    {(data.discountedPrice ?? data.regularPrice)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
-                    {data.type === 'rent' || data.type === 'bnb'
-                      ? '/ month'
-                      : null}
-                  </p>
-                </div>
-
-                <img src={id} alt='' />
+                <img src={id} alt='' className='h-full' />
               </div>
             </SwiperSlide>
           ))}
