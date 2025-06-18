@@ -11,9 +11,6 @@ function Explore() {
         <div className='swiperSlideDiv col-span-3 inline-block text-center '>
           <Slider />
         </div>
-        {/* <h1 className="hero hero-content text-8xl text-center text-bolder justify-center p-20">
-         Kia Ora!
-        </h1> */}
         <div className='hero min-h-screen flex items-center'>
           <div className='flex-1 max w-4x1 mx-auto p-10'>
             <div className='grid grid-cols-3 grid-rows-15 grid-flow-row gap-5'>
