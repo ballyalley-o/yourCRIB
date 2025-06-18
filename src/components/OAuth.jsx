@@ -3,6 +3,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
 import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import { toast } from 'react-toastify'
+import { FaGoogle } from 'react-icons/fa'
 import googleIcon from '../assets/svg/googleIcon.svg'
 
 
@@ -37,22 +38,15 @@ function OAuth() {
 
   return (
     <>
-      <div className="form-control pt-10">
-        <p className="text-sm">
-          {" "}
-          or Sign {location.pathname === "/sign-up" ? "up" : "in"} with
-        </p>
-        <div className="grid grid-col-3">
-          <button
-            className="col-span-1 w-10 h-10 py-10"
-            onClick={onGoogleClick}
-          >
-            <img src={googleIcon} className="rounded-lg " alt="google" />
+      <div className='form-control'>
+        <div className=''>
+          <button className='col-span-1 w-full flex justify-center gap-2 h-10 my-5' onClick={onGoogleClick}>
+             Sign In with Google <FaGoogle size={25} />
           </button>
         </div>
       </div>
     </>
-  );
+  )
 }
 
 export default OAuth
